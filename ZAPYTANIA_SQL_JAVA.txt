@@ -1,0 +1,63 @@
+CREATE TABLE platnosci (
+platnosc_id	NUMBER(5) NOT NULL PRIMARY KEY,
+metoda_platnosci VARCHAR2(20)--np karta/gotowka/przelew/
+);
+
+CREATE TABLE samochod (
+samochod_id	NUMBER(5) NOT NULL PRIMARY KEY,--numer samochodu
+marka		VARCHAR2(20),--marka samochodu
+model		VARCHAR2(20),--model samochodu
+VIN		VARCHAR2(17),--numer vin
+rocznik		NUMBER(4),--rocznik auta np 2013
+cena		NUMBER(9,2)--cena za samochod w przypadku kupna podana w euro np. 30203,33
+);
+
+CREATE TABLE pracownicy (
+pracownik_id 	NUMBER(5) NOT NULL PRIMARY KEY,--numer klienta
+nazwisko	VARCHAR2(40),--nazwisko np. szchachmed
+imie		VARCHAR2(35),--imie np abdul
+zarobki		NUMBER(10),--zarobki w euro
+stanowisko	VARCHAR2(40)--stanowisko jakie obejmuje pracownik, np. doradca klienta
+);
+
+create sequence klientdane start with 21 increment by 1;
+create sequence pracownicydane start with 13 increment by 1;
+create sequence samochoddane start with 26 increment by 1;
+create sequence zamowieniadane start with 21 increment by 1;
+
+CREATE TABLE klient (
+klient_id 	NUMBER(5) NOT NULL  PRIMARY KEY,--numer unikalny
+nazwisko	VARCHAR2(20),--nazwisko np brzeczyszczykiewicz
+imie 		VARCHAR2(15),--imie np zdzichu
+PESEL		NUMBER(11),--numer pesel
+miejscowosc	VARCHAR2(30),--np. dorohusk, kielce, warszawa,monaco
+ulica		VARCHAR2(30),--np. dziury duze
+numer_domu	VARCHAR2(7)--np. 95499
+);
+
+CREATE TABLE zamowienie (
+zamowienie_id 	NUMBER(5) NOT NULL PRIMARY KEY, --numer zamowienia
+klient_id 	NUMBER(5) NOT NULL, --numer klienta
+pracownik_id 	NUMBER(5) NOT NULL, --numer pracownika
+samochod_id 	NUMBER(5) NOT NULL, --numer samochodu
+platnosc_id 	NUMBER(5) NOT NULL, -- numer platnosci
+rok number(5), -- rok zlozenia zamowienia
+miesiac number(5), -- miesiac zlozenia zamowienia
+dzien number(5), -- dzien zlozenia zamowienia
+koszt number(10),-- koszt zamowienia na samochod
+CONSTRAINT ZAMOWIENIE_fk FOREIGN KEY (klient_id) REFERENCES klient(klient_id),
+CONSTRAINT ZAMOWIENIE_fk1 FOREIGN KEY (platnosc_id) REFERENCES platnosci(platnosc_id),
+CONSTRAINT ZAMOWIENIE_fk2 FOREIGN KEY (samochod_id) REFERENCES samochod(samochod_id),
+CONSTRAINT ZAMOWIENIE_fk3 FOREIGN KEY (pracownik_id) REFERENCES pracownicy(pracownik_id)
+);
+
+DROP table KLIENT CASCADE CONSTRAINTS;
+DROP table PLATNOSCI CASCADE CONSTRAINTS;
+DROP table PRACOWNICY CASCADE CONSTRAINTS;
+DROP table SAMOCHOD CASCADE CONSTRAINTS;
+DROP table ZAMOWIENIE CASCADE CONSTRAINTS;
+
+drop sequence klientdane;
+drop sequence pracownicydane;
+drop sequence samochoddane;
+drop sequence zamowieniadane;
